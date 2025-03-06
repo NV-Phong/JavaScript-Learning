@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="style.css" />
+      <title>Nguyen Van Phong - 2180607874</title>
+   </head>
+   <body>
+      <!---------------------------------------------------------------------------------------------------->
+      <form id="postForm" onsubmit="handleCreatePOST(event)">
+         <input
+            type="text"
+            id="title"
+            placeholder="Enter post title"
+            required
+         />
+         <input
+            type="number"
+            id="views"
+            placeholder="Enter views"
+            min="0"
+            required
+         />
+         <select id="authorSelect" required></select>
+         <label><input type="checkbox" id="isPublished" /> Published </label>
+         <button type="submit" class="custombtn">Create Post</button>
+      </form>
+      <!---------------------------------------------------------------------------------------------------->
+      <h2>POST LIST</h2>
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>TITLE</th>
+               <th>VIEW</th>
+               <th>AUTHOR</th>
+               <th>PUBLISHED</th>
+               <th>ACTION</th>
+            </tr>
+         </thead>
+         <tbody id="post-table"></tbody>
+      </table>
+      <template id="post-template">
+         <tr>
+            <td class="post-id"></td>
+            <td class="post-title"></td>
+            <td class="post-views"></td>
+            <td class="post-author"></td>
+            <td class="post-published"></td>
+            <td class="post-action">
+               <button class="edit-btn custombtn">Edit</button>
+               <button class="delete-btn custombtn" onclick="deletePOSTHandler(event)">Delete</button>
+            </td>
+         </tr>
+      </template>
+      <!---------------------------------------------------------------------------------------------------->
+      <form id="authorForm" onsubmit="handleCreateAUTHOR(event)">
+         <input
+            type="text"
+            id="authorName"
+            placeholder="Enter author name"
+            required
+         />
+         <button type="submit" class="custombtn">Create Author</button>
+      </form>
+      <!---------------------------------------------------------------------------------------------------->
+      <h2>AUTHOR LIST</h2>
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>NAME</th>
+               <th>POST COUNT</th>
+               <th>ACTION</th>
+            </tr>
+         </thead>
+         <tbody id="author-table"></tbody>
+      </table>
+      <template id="author-template">
+         <tr>
+            <td class="author-id"></td>
+            <td class="author-name"></td>
+            <td class="author-post-count"></td>
+            <td>
+               <button class="edit-btn custombtn">Edit</button>
+               <button
+                  class="delete-btn custombtn"
+                  onclick="deleteAUTHORHandler(event)"
+               >
+                  Delete
+               </button>
+            </td>
+         </tr>
+      </template>
+
+      <script defer src="server.js"></script>
+   </body>
+</html>
