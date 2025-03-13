@@ -3,6 +3,7 @@ dotenv.config({ path: ".env.development" });
 import express from "express";
 const APP = express();
 APP.use(express.json());
+import productRoutes from "./routes/product.route.js";
 import MONGOOSE from "mongoose";
 
 let students = [];
@@ -92,8 +93,13 @@ APP.delete("/students/:id", (req, res) => {
 
 //--------------------------------------------------CONFIG--------------------------------------------------//
 
+APP.use("/api/products", productRoutes);
+
 // Connect to MongoDB
-MONGOOSE.connect(process.env.MONGODB_URL);
+MONGOOSE.connect(process.env.MONGODB_URL).catch((error) => {
+   console.error("MongoDB connection error:", error);
+   process.exit(1);
+});
 MONGOOSE.connection.on("connected", () => console.log("Connected to MongoDB"));
 
 // Start Server
