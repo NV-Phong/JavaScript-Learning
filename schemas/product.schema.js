@@ -7,6 +7,11 @@ const productSchema = new MONGOOSE.Schema(
       Price: { type: Number, required: true, min: 0 },
       URLimg: { type: String, default: "No image" },
       IsDeleted: { type: Boolean, default: false },
+      Category: {
+         type: MONGOOSE.Schema.Types.ObjectId,
+         ref: "Category",
+         required: true,
+      },
    },
    { timestamps: true }
 );

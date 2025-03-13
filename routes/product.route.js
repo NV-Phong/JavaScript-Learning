@@ -7,7 +7,8 @@ const router = Router();
 
 // Routes
 router.get("/", async (req, res) => {
-  const result = await productService.getAllProducts();
+  const { categoryId } = req.query; // Optional category filter
+  const result = await productService.getAllProducts(categoryId);
   handleResponse(res, result);
 });
 
@@ -17,7 +18,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const result = await productService.createProduct(req.body);
+  const result = await productService.createProduct(req.body); // Category as ObjectId in req.body
   handleResponse(res, result);
 });
 
