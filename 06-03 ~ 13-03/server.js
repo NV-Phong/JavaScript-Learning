@@ -3,6 +3,7 @@ dotenv.config({ path: ".env.development" });
 import express from "express";
 const APP = express();
 APP.use(express.json());
+import MONGOOSE from "mongoose";
 
 let students = [];
 class Student {
@@ -91,6 +92,11 @@ APP.delete("/students/:id", (req, res) => {
 
 //--------------------------------------------------CONFIG--------------------------------------------------//
 
+// Connect to MongoDB
+MONGOOSE.connect(process.env.MONGODB_URL);
+MONGOOSE.connection.on("connected", () => console.log("Connected to MongoDB"));
+
+// Start Server
 APP.listen(process.env.PORT, process.env.HOST, () => {
    console.log(
       `🚀 Server is running on http://${process.env.HOST}:${process.env.PORT} 🚀`
