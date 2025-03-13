@@ -1,14 +1,17 @@
 import dotenv from "dotenv";
 import express from "express";
-import productRoutes from "./routes/product.route.js";
 import MONGOOSE from "mongoose";
+import productRoutes from "./routes/product.route.js";
+import categoryRoutes from "./routes/category.routes.js";
 
 dotenv.config({ path: ".env.development" });
 const APP = express();
+APP.use(express.json());
 
 //--------------------------------------------------CONFIG--------------------------------------------------//
 
 APP.use("/api/products", productRoutes);
+APP.use("/api/categories", categoryRoutes);
 
 // Connect to MongoDB
 MONGOOSE.connect(process.env.MONGODB_URL).catch((error) => {
