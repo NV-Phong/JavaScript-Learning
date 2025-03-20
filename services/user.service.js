@@ -7,7 +7,7 @@ const getAllUsers = async (queryParams = {}) => {
       const query = { IsDeleted: false };
 
       if (username) {
-         query.UserName = { $regex: username, $options: "i" }; // Case-insensitive contains
+         query.Username = { $regex: username, $options: "i" }; // Case-insensitive contains
       }
       if (fullName) {
          query.FullName = { $regex: fullName, $options: "i" }; // Case-insensitive contains
@@ -70,11 +70,11 @@ const createUser = async (userData) => {
 };
 
 // POST: Activate user status by email and username
-const activateUser = async ({ email, userName }) => {
+const activateUser = async ({ Email, Username }) => {
    try {
       const user = await User.findOne({
-         Email: email,
-         UserName: userName,
+         Email: Email,
+         Username: Username,
          IsDeleted: false,
       });
 

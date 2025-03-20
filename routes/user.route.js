@@ -27,8 +27,8 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/activate", async (req, res) => {
-   const { email, userName } = req.body;
-   const result = await userService.activateUser({ email, userName });
+   const { Email, Username } = req.body;
+   const result = await userService.activateUser({ Email, Username });
    handleResponse(res, result);
 });
 
