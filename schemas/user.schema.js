@@ -1,5 +1,8 @@
 import MONGOOSE from "mongoose";
-
+import {
+   hashPassword,
+   comparePasswordMethod,
+} from "../utils/security.utils.js";
 const userSchema = new MONGOOSE.Schema(
    {
       Username: { type: String, required: true, unique: true },
@@ -8,7 +11,7 @@ const userSchema = new MONGOOSE.Schema(
       FullName: { type: String, default: "" },
       AvatarURL: { type: String, default: "" },
       Status: { type: Boolean, default: false },
-      LoginCount: { type: Number, default: 0, mint: 0 },
+      LoginCount: { type: Number, default: 0, min: 0 },
       IsDeleted: { type: Boolean, default: false },
       Role: {
          type: MONGOOSE.Schema.Types.ObjectId,
@@ -18,5 +21,8 @@ const userSchema = new MONGOOSE.Schema(
    },
    { timestamps: true }
 );
+
+hashPassword(userSchema);
+comparePasswordMethod(userSchema);
 
 export default MONGOOSE.model("User", userSchema);
