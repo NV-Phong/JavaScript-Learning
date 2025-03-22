@@ -6,9 +6,10 @@ import authMiddleware from "../middleware/auth.middleware.js"; // Import the mid
 const router = Router();
 
 // Apply the middleware to all routes
-router.use(authMiddleware.verifyToken);
+// router.use(authMiddleware.verifyToken);
 
 // Routes
+//TODO : get all, getbyid (trừ id của chính user): mod
 router.get("/", async (req, res) => {
    const { username, fullName, minLoginCount, maxLoginCount } = req.query;
    const result = await userService.getAllUsers({
@@ -25,10 +26,15 @@ router.get("/:id", async (req, res) => {
    handleResponse(res, result);
 });
 
-router.post("/", async (req, res) => {
-   const result = await userService.createUser(req.body);
-   handleResponse(res, result);
-});
+router.post(
+   "/",
+   authMiddleware.verifyToken,
+   authMiddleware.verifyRole(["ADMIN"]),
+   async (req, res) => {
+      const result = await userService.createUser(req.body);
+      handleResponse(res, result);
+   }
+);
 
 router.post("/activate", async (req, res) => {
    const { Email, Username } = req.body;
@@ -36,14 +42,24 @@ router.post("/activate", async (req, res) => {
    handleResponse(res, result);
 });
 
-router.put("/:id", async (req, res) => {
-   const result = await userService.updateUser(req.params.id, req.body);
-   handleResponse(res, result);
-});
+router.put(
+   "/:id",
+   authMiddleware.verifyToken,
+   authMiddleware.verifyRole(["ADMIN"]),
+   async (req, res) => {
+      const result = await userService.updateUser(req.params.id, req.body);
+      handleResponse(res, result);
+   }
+);
 
-router.delete("/:id", async (req, res) => {
-   const result = await userService.softDeleteUser(req.params.id);
-   handleResponse(res, result);
-});
+router.delete(
+   "/:id",
+   authMiddleware.verifyToken,
+   authMiddleware.verifyRole(["ADMIN"]),
+   async (req, res) => {
+      const result = await userService.softDeleteUser(req.params.id);
+      handleResponse(res, result);
+   }
+);
 
 export default router;

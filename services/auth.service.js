@@ -60,7 +60,76 @@ const login = async (loginData) => {
    }
 };
 
+const getCurrentUser = async (userId) => {
+   try {
+      const user = await User.findById(userId).populate("Role");
+      if (!user) {
+         return {
+            success: false,
+            message: "Không tìm thấy người dùng",
+            status: 404,
+         };
+      }
+      return { success: true, data: user, status: 200 };
+   } catch (error) {
+      return {
+         success: false,
+         message: "Lỗi khi lấy thông tin người dùng",
+         status: 500,
+      };
+   }
+};
+
+const changePassword = async (userId, passwordData) => {
+   try {
+      const { currentPassword, newPassword } = passwordData;
+
+      if (!currentPassword || !newPassword) {
+         return {
+            success: false,
+            message: "Mật khẩu hiện tại và mật khẩu mới là bắt buộc",
+            status: 400,
+         };
+      }
+
+      const user = await User.findById(userId);
+      if (!user) {
+         return {
+            success: false,
+            message: "Không tìm thấy người dùng",
+            status: 404,
+         };
+      }
+
+      const isMatch = await user.comparePassword(currentPassword);
+      if (!isMatch) {
+         return {
+            success: false,
+            message: "Mật khẩu hiện tại không đúng",
+            status: 401,
+         };
+      }
+
+      user.Password = newPassword; // Giả sử schema có pre-save hook để hash
+      await user.save();
+
+      return {
+         success: true,
+         message: "Đổi mật khẩu thành công",
+         status: 200,
+      };
+   } catch (error) {
+      return {
+         success: false,
+         message: "Lỗi khi đổi mật khẩu",
+         status: 500,
+      };
+   }
+};
+
 export default {
    registerAccount,
    login,
+   getCurrentUser,
+   changePassword
 };
