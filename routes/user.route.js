@@ -62,4 +62,14 @@ router.delete(
    }
 );
 
+router.get("/me", authMiddleware.verifyToken, async (req, res) => {
+   const result = await authService.getCurrentUser(req.user.id);
+   handleResponse(res, result);
+});
+
+router.put("/changepassword", authMiddleware.verifyToken, async (req, res) => {
+   const result = await authService.changePassword(req.user.id, req.body);
+   handleResponse(res, result);
+});
+
 export default router;
