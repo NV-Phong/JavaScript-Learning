@@ -1,8 +1,12 @@
 import { Router } from "express";
 import userService from "../services/user.service.js";
 import handleResponse from "../utils/response-handler.utils.js";
+import authMiddleware from "../middleware/auth.middleware.js"; // Import the middleware
 
 const router = Router();
+
+// Apply the middleware to all routes
+router.use(authMiddleware.verifyToken);
 
 // Routes
 router.get("/", async (req, res) => {

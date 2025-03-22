@@ -1,5 +1,6 @@
 import User from "../schemas/user.schema.js";
 import Role from "../schemas/role.schema.js";
+import { generateAccessToken } from "../utils/jwt.utils.js";
 
 const registerAccount = async (userData) => {
    try {
@@ -30,6 +31,36 @@ const registerAccount = async (userData) => {
    }
 };
 
+const login = async (loginData) => {
+   try {
+      const { Email, Password } = loginData;
+
+      if (!Email || !Password) {
+         throw new Error("Email và mật khẩu là bắt buộc");
+      }
+
+      const user = await User.findOne({ Email }).populate("Role");
+      if (!user) {
+         throw new Error("Email không tồn tại");
+      }
+
+      if (!user.Role || !user.Role.RoleName) {
+         throw new Error("User role is invalid or missing RoleName");
+      }
+
+      const isMatch = await user.comparePassword(Password);
+      if (!isMatch) {
+         throw new Error("Mật khẩu không đúng");
+      }
+
+      const token = generateAccessToken(user);
+      return { access_token: token }; // Only return the token
+   } catch (error) {
+      throw new Error(error.message || "Error during login");
+   }
+};
+
 export default {
    registerAccount,
+   login,
 };

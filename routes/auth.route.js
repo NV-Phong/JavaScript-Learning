@@ -9,4 +9,13 @@ router.post("/register", async (req, res) => {
    handleResponse(res, result);
 });
 
+router.post("/login", async (req, res) => {
+   try {
+      const result = await authService.login(req.body);
+      handleResponse(res, { success: true, data: result, status: 200 });
+   } catch (error) {
+      handleResponse(res, { success: false, message: error.message, status: 401 });
+   }
+});
+
 export default router;
