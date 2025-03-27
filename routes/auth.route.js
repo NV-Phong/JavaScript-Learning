@@ -1,20 +1,38 @@
 import { Router } from "express";
 import authService from "../services/auth.service.js";
 import handleResponse from "../utils/response-handler.utils.js";
+import validate from "../middleware/validate.js";
+import {
+   registerValidation,
+   loginValidation,
+} from "../utils/validators/auth.validator.js";
+import { STATUS_CODES } from "../utils/constants.js";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
-   const result = await authService.registerAccount(req.body);
-   handleResponse(res, result);
-});
+router.post(
+   "/register",
+   [...registerValidation, validate],
+   async (req, res) => {
+      const result = await authService.registerAccount(req.body);
+      handleResponse(res, result);
+   }
+);
 
-router.post("/login", async (req, res) => {
+router.post("/login", [...loginValidation, validate], async (req, res) => {
    try {
       const result = await authService.login(req.body);
-      handleResponse(res, { success: true, data: result, status: 200 });
+      handleResponse(res, {
+         success: true,
+         data: result,
+         status: STATUS_CODES.OK,
+      });
    } catch (error) {
-      handleResponse(res, { success: false, message: error.message, status: 401 });
+      handleResponse(res, {
+         success: false,
+         message: error.message,
+         status: STATUS_CODES.UNAUTHORIZED,
+      });
    }
 });
 
